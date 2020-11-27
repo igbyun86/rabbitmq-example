@@ -2,19 +2,13 @@ package com.ig.rabbitmqex.config;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.core.env.Environment;
 
 @Configuration
 @PropertySource(value="classpath:application.properties")
@@ -70,9 +64,36 @@ public class RabbitMQConfiguration {
         //
         template.setConfirmCallback(new CustomConfirmCallback());
 
+        // object -> json
+        //template.setMessageConverter(producerJackson2MessageConverter());
+
         return template;
     }
 
+    /**
+     * binding 없는 Queue는 default exchange에 binding된다.
+     * @return
+     */
+    @Bean
+    public Queue objectQueue() {
+        return new Queue("object.queue");
+    }
 
+    @Bean
+    public Queue userQueue() {
+        return new Queue("object.user.queue");
+    }
+
+    @Bean
+    public Queue jsonQueue() {
+        return new Queue("json.queue");
+    }
+
+/*
+    @Bean
+    public Jackson2JsonMessageConverter producerJackson2MessageConverter() {
+        return new Jackson2JsonMessageConverter();
+    }
+*/
 
 }
