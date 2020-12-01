@@ -89,6 +89,11 @@ public class RabbitMQConfiguration {
         return new Queue("json.queue");
     }
 
+    @Bean
+    public Queue igQueue() {
+        return new Queue("ig.queue");
+    }
+
 /*
     @Bean
     public Jackson2JsonMessageConverter producerJackson2MessageConverter() {
